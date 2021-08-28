@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lobster|Open+Sans|Raleway|Poppins|Montserrat|Ranchers">
+    <title>Create Graph</title>
+</head>
+<style>
+    html, body {
+        height: 100%
+    } body {
+        text-align: center;
+        font-family: Poppins;
+        overflow: hidden;
+        user-select: none
+    } body, p {
+        margin: 0
+    } header {
+        display: -webkit-box;
+        height: 150px;
+        position: relative;
+        z-index: 1;
+        box-shadow: rgb(0,0,0,0.2) 0px 4px 0px;
+        background: linear-gradient(to right, #d15887, #c37090)
+    } main {
+        overflow: hidden;
+        display: flex;
+        height: calc(100% - 150px)
+    } .divTitulo {
+        width: max-content;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        margin: auto
+    } .titulo {
+        font-family: Ranchers;
+        font-size: 80px;
+        background: rgba(207, 148, 178, 0.8) url("wave.png");
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        filter: drop-shadow(rgb(0,0,0,0.3) 3px 3px 0px);
+        animation: moveBck 3s infinite linear
+    } .descrit {
+        font-family: Open Sans;
+        font-size: 16px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        text-shadow: rgb(0,0,0,0.3) 2px 2px 0px;
+        color: rgb(210,210,210)
+    } .sectFunct {
+        width: 400px;
+        margin-left: -390px;
+        background: #b1406b;
+        color: rgb(210,210,210);
+        text-shadow: rgb(0,0,0,0.2) 1px 1px 0px;
+        height: 100%;
+        position: relative;
+        z-index: 1;
+        filter: drop-shadow(rgb(0,0,0,0.3) 3px 0px 0px);
+        display: -webkit-box;
+        transition: margin-left 0.5s ease
+    } .artcFunct {
+        margin: 20px;
+        width: calc(100% - 40px);
+        border-radius: 20px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        background: rgb(0,0,0,0.15);
+        box-shadow: rgb(0,0,0,0.35) 0px 0px 10px inset
+    } .artcFunct::-webkit-scrollbar {
+        width: 20px;
+        background: rgb(70,70,70);
+        border-radius: 0px 10px 10px 0px;
+    } .artcFunct::-webkit-scrollbar-thumb {
+        background: rgb(105,105,105);
+        border-radius: 10px;
+        border: 3px solid rgb(70,70,70)
+    } .aba {
+        cursor: grab;
+        display: flex;
+        align-items: center;
+    } .divGrab {
+        position: fixed;
+        z-index: 2;
+        display: none;
+        width: 100%;
+        height: 100%;
+        cursor: grabbing
+    } .sectGraph {
+        cursor: grab;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        width: calc(100% - 10px);
+        background: rgb(221, 203, 209);
+        transition: width 0.5s ease
+    } .marcador {
+        position: relative;
+        width: 120px;
+        height: 40px;
+        border-radius: 26px;
+        margin: 5px;
+        padding: 6px;
+        background: #c0617d;
+        box-shadow: rgb(0,0,0,0.2) 2px 2px 0px;
+        transition: background 0.6s ease
+    } .marcador > div {
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        border-radius: 20px;
+        cursor: pointer;
+        background: #e498af;
+        transition: background 0.6s ease
+    } .centraliz {
+        display: flex;
+        align-items: center;
+        justify-content: center
+    } .marcType {
+        display: none;
+        padding: 20px 0px
+    } .nomeMarc {
+        transition: all 0.4s ease
+    } .nomeMarc--marc {
+        color: #db95b8;
+    } .funct {
+        width: 100%;
+        display: -webkit-box;
+        font-family: Lobster;
+    } .funct__fx {
+        width: 100px;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 50px;
+        background: rgb(90, 32, 56);
+    } .funct__y {
+        width: calc(100% - 100px);
+        display: -webkit-box;
+        overflow-x: auto;
+        overflow-y: auto;
+        box-shadow: rgb(0,0,0,0.3) 0px 0px 10px inset;
+        background: rgb(133, 51, 77);
+    } .funct__y::-webkit-scrollbar {
+        height: 8px;
+        background: rgb(221, 203, 209)
+    } .funct__y::-webkit-scrollbar-thumb {
+        background: rgb(184, 124, 144);
+    } .funct__y > div {
+        margin: auto 0px;
+        width: max-content;
+        display: -webkit-box;
+        font-size: 40px;
+        padding: 10px;
+    } .grau {
+        text-align: center;
+        border: none;
+        border-radius: 0px;
+        width: 100%;
+        height: 50px;
+        font-size: 24px;
+        font-family: Open Sans;
+        color: rgb(240,240,240);
+        text-shadow: rgb(0,0,0,0.15) 2px 2px 0px;
+        background: linear-gradient(to right, rgb(255,255,255,0.2), rgb(255,255,255,0.05));
+    } .grau::-webkit-input-placeholder {
+        font-size: 13px;
+        transition: all 0.3s ease;
+        color: rgb(209,187,198);
+        text-shadow: none
+    } .grau:focus::-webkit-input-placeholder {
+        transform: translateY(150%)
+    } .sobTxt {
+        margin-top: 24px;
+    } .exp {
+        margin-top: 2px;
+    } .sobTxt, .exp {
+        font-family: Calibri;
+        font-size: 26px
+    } table {
+        width: 100%;
+        padding: 0px
+    } .artcFunct::-webkit-scrollbar {
+        background: rgb(184,124,144)
+    } .artcFunct::-webkit-scrollbar-thumb {
+        border-color: rgb(184,124,144);
+        border-width: 4px;
+        background: rgb(167,93,117)
+    } .inpX, .inpY {
+        border: none;
+        border-radius: 0px;
+        padding: 5px;
+        background: rgb(90,32,56);
+        height: 40px;
+        color: rgb(204,152,178);
+        font-size: 25px;
+        text-align: center;
+        width: calc(100% - 7px);
+    } .inpX {
+        margin-left: -4px;
+    } .inpY {
+        margin-left: -1px;
+    } .trXY {
+        display: none  
+    } .mensSPD {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+        height: 100%;
+        margin-left: -200%;
+        position: absolute;
+        color: rgb(160,160,160);
+        font-size: 25px;
+        font-family: Open Sans;
+        background: linear-gradient(to right, rgb(0,0,0,0.85), rgb(0,0,0,0.7));
+        transition: margin-left 0.5s ease
+    } .mensSPD > p {
+        width: 300px
+    } input:focus {
+        outline: none
+    } input[type=number]::-webkit-inner-spin-button {
+        display: none;
+    } svg {
+        transform: rotateY(180deg)
+    } svg > polygon {
+        cursor: pointer
+    } #menu {
+        height: 80px;
+        filter: invert(1) sepia(1) hue-rotate(210deg) brightness(1);
+        margin: 35px 8px 0px;
+        cursor: pointer;
+        transition: all 0.3s ease
+    } #menu:hover {
+        filter: invert(0.8) sepia(1.5) hue-rotate(210deg) brightness(0.9)
+    } .conteudo {
+        overflow: hidden;
+        width: 0%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        background: linear-gradient(to right, rgb(0,0,0,0.7), rgb(0,0,0,0.5));
+        z-index: 2;
+        position: fixed;
+        transition: all 0.6s ease
+    } .parte_conteudo {
+        overflow: hidden;
+        background: rgb(0,0,0,0.65);
+        box-shadow: rgb(0,0,0,0.8) 0px 0px 10px inset;
+        border-radius: 100px;
+        width: 900px;
+        height: calc(100% - 200px);
+    } .title_content {
+        font-weight: bold;
+        color: rgb(150,150,150);
+        font-size: 40px
+    } .tabCoef {
+        border-spacing: 0px;
+        margin-top: 5px
+    } .tabCoef > tbody > tr {
+        display: none
+    } .tabCoef > tbody > tr > th:nth-child(1) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 80px;
+        font-size: 40px;
+        background: rgb(90,32,56)
+    } .tabCoef > tbody > tr > th:nth-child(2) {
+        width: 280px;
+        font-size: 24px;
+        background: rgb(122, 38, 73)
+    } @keyframes moveBck {
+        from { background-position: 0px -20px }
+        to { background-position: 300px -20px }
+    }
+</style>
+<body>
+    <section class=conteudo>
+        <article class=parte_conteudo>
+            <p class=title_content>Construção de gráficos por pontos especificados</p>
+        </article>
+    </section>
+    <section class=divGrab></section>
+    <header>
+        <div class=divTitulo>
+            <p class=titulo>Create Graph</p>
+            <p class=descrit>Estabeleça pontos no Plano Cartesiano, crie funções e construa gráficos 2D</p>
+        </div>
+        <img id=menu src="https://image.flaticon.com/icons/png/512/55/55003.png">
+    </header>
+    <main>
+        <section class=sectFunct>
+            <article class=artcFunct>
+                <div class="centraliz marcType">
+                    <label class="nomeMarc nomeMarc--marc">Polinomial</label>
+                    <div class=marcador>
+                        <div></div>
+                    </div>
+                    <label class=nomeMarc>Customizada</label>
+                </div>
+                <input type=number class=grau placeholder="Insira aqui o grau da função polinomial">
+                <div class=funct>
+                    <div class=funct__fx>f(x)</div>
+                    <div class=funct__y><div></div></div>
+                </div>
+                <div>
+                    <table class=tabXY>
+                        <tr>
+                            <th>x</th>
+                            <th>y</th>
+                        </tr>
+                    </table>
+                </div>
+                <div>
+                    <table class=tabCoef></table>
+                </div>
+            </article>
+            <article class=aba>
+                <svg width=50 height=320>
+                    <polygon points="51,0 49.982,1 49.929,2 49.840,3 49.716,4 49.555,5 49.356,6 49.120,7 48.845,8 48.530,9 48.173,10 47.773,11 47.328,12 46.835,13 46.292,14 45.695,15 45.040,16 44.321,17 43.533,18 42.668,19 41.716,20 12.426,49.289 11.459,50.289 10.552,51.289 9.700,52.289 8.900,53.289 8.148,54.289 7.441,55.289 6.775,56.289 6.150,57.289 5.562,58.289 5.010,59.289 4.492,60.289 4.008,61.289 3.555,62.289 3.133,63.289 2.740,64.289 2.376,65.289 2.041,66.289 1.732,67.289 1.451,68.289 1.195,69.289 0.966,70.289 0.761,71.289 0.581,72.289 0.426,73.289 0.296,74.289 0.189,75.289 0.106,76.289 0.047,77.289 0.012,78.289 0.000,79.289 0.000,240.711 0.012,241.711 0.047,242.711 0.106,243.711 0.189,244.711 0.296,245.711 0.426,246.711 0.581,247.711 0.761,248.711 0.966,249.711 1.195,250.711 1.451,251.711 1.732,252.711 2.041,253.711 2.376,254.711 2.740,255.711 3.133,256.711 3.555,257.711 4.008,258.711 4.492,259.711 5.010,260.711 5.562,261.711 6.150,262.711 6.775,263.711 7.441,264.711 8.148,265.711 8.900,266.711 9.700,267.711 10.552,268.711 11.459,269.711 12.426,270.711 41.716,300 42.668,301 43.533,302 44.321,303 45.040,304 45.695,305 46.292,306 46.835,307 47.328,308 47.773,309 48.173,310 48.530,311 48.845,312 49.120,313 49.356,314 49.555,315 49.716,316 49.840,317 49.929,318 49.982,319 51,300" fill=#b1406b />
+                    <polygon class=seta points="15,160 35,140 35,180" fill=rgb(221,203,209) />
+                </svg>
+            </article>
+        </section>
+        <section class=sectGraph>
+            <article class=mensSPD>
+                <p><b>O sistema inserido NÃO é um S.P.D.</b> (Sistema Possível e Determinado). Ou seja, ele não possui solução ou possui infinitas soluções!</p>
+            </article>
+            <canvas></canvas>
+        </section>
+    </main>
+</body>
+<script>
+    //document.addEventListener("DOMContentLoaded", () => {
+        const crctSub = "₀₁₂₃₄₅₆₇₈₉"
+        const crctExp = "⁰¹²³⁴⁵⁶⁷⁸⁹"
+        const pi = Math.PI
+        let divGrab = document.querySelector(".divGrab")
+        let cnv = document.querySelector("canvas")
+        let ctx = cnv.getContext("2d")
+        let sF = document.querySelector(".sectFunct")
+        let sG = document.querySelector(".sectGraph")
+        let SVG = document.querySelector("svg > polygon")
+        let W = window.innerWidth - 10
+        let H = window.innerHeight - 150
+        let wDesl = 40
+        let hDesl = 40
+        let unitCentrX = 0
+        let unitCentrY = 0
+        let quant
+        let pXant
+        let pYant
+        let comprUnit = 80
+        cnv.width = W
+        cnv.height = H
+        let condSVG = false
+        let numSeta = 0
+        let numZoom = 0
+        let fator = 1
+        let setSeta
+        let seta = document.querySelector(".seta")
+        let nomeMarc = document.querySelectorAll(".nomeMarc")
+        let divMarc = document.querySelector(".marcador > div")
+        let tabela = document.querySelector(".tabXY")
+        let tabela2 = document.querySelector(".tabCoef")
+        for(let i = 0; i <= 50; i++) {
+            tabela.innerHTML += "<tr class=trXY><th><input type=number class=inpX></th><th><input type=number class=inpY></th></tr>"
+            tabela2.innerHTML += "<tr><th>a<div class=sobTxt>" + (50 - i) + "</div></th><th class=thCoef></th></tr>"
+        } let conjX = tabela.querySelectorAll(".inpX")
+        let conjY = tabela.querySelectorAll(".inpY")
+        let linhas = tabela.querySelectorAll(".trXY")
+        let linhas2 = tabela2.querySelectorAll("tr")
+        let sectG = document.querySelector(".sectGraph")
+        let mens = document.querySelector(".mensSPD")
+        let setDiv
+        let numDiv = -30
+        let marcBoole = false
+        let condGraph = null
+
+        document.querySelector("#menu").addEventListener("click", function() {
+            document.querySelector(".conteudo").style.width = "100%"
+        });
+        for(let i = 0; i <= 50; i++) {
+            conjX[i].addEventListener("input", verifInputs)
+            conjY[i].addEventListener("input", verifInputs);
+        } let marcarTrue = function() {
+            divMarc.removeEventListener("click", marcarTrue)
+            marcBoole = true
+            nomeMarc[0].classList.remove("nomeMarc--marc")
+            nomeMarc[1].classList.add("nomeMarc--marc")
+            setDiv = setInterval(function() {
+                numDiv++
+                divMarc.style.width = (40 + 10*Math.pow(2, 9*(30 - Math.abs(numDiv))/30 - 6)*(1 - Math.floor((numDiv + 30)/60))) + "px"
+                if(numDiv == 0) {
+                    divMarc.style.left = "auto"
+                    divMarc.style.right = "6px"
+                } else if(numDiv == 30) {
+                    clearInterval(setDiv)
+                    divMarc.addEventListener("click", marcarFalse)
+                }
+            }, 10)
+        }; let marcarFalse = function() {
+            divMarc.removeEventListener("click", marcarFalse)
+            marcBoole = false
+            nomeMarc[1].classList.remove("nomeMarc--marc")
+            nomeMarc[0].classList.add("nomeMarc--marc")
+            setDiv = setInterval(function() {
+                numDiv--
+                divMarc.style.width = (40 + 10*Math.pow(2, 9*(30 - Math.abs(numDiv))/30 - 6)*(1 - Math.floor((30 - numDiv)/60))) + "px"
+                if(numDiv == 0) {
+                    divMarc.style.left = "6px"
+                    divMarc.style.right = "auto"
+                } else if(numDiv == -30) {
+                    clearInterval(setDiv)
+                    divMarc.addEventListener("click", marcarTrue)
+                }
+            }, 10)
+        }; divMarc.addEventListener("click", marcarTrue)
+        let openSF = () => {
+            SVG.removeEventListener("click", openSF)
+            sF.style.marginLeft = "0px"
+            sG.style.width = "calc(100% - 400px)"
+            setSeta = setInterval(() => {
+                numSeta++
+                changePointsSeta()
+                if(numSeta == 25) {
+                    SVG.addEventListener("click", closeSF)
+                    clearInterval(setSeta)
+                }
+            }, 20)
+        }; let closeSF = () => {
+            SVG.removeEventListener("click", closeSF)
+            sF.style.marginLeft = "-390px"
+            sG.style.width = "calc(100% - 10px)"
+            setSeta = setInterval(() => {
+                numSeta--
+                changePointsSeta()
+                if(numSeta == 0) {
+                    SVG.addEventListener("click", openSF)
+                    clearInterval(setSeta)
+                }
+            }, 25)
+        }; SVG.addEventListener("click", openSF);
+        newCartesiano()
+        openSF()
+        let movePlain = () => {
+            let pX = event.clientX
+            let deslX = pX - pXant
+            let deslUnitX = Math.floor((wDesl + deslX)/comprUnit)
+            let pY = event.clientY
+            let deslY = pY - pYant
+            let deslUnitY = Math.floor((hDesl + deslY)/comprUnit)
+            wDesl = (wDesl + deslX) - deslUnitX*comprUnit
+            hDesl = (hDesl + deslY) - deslUnitY*comprUnit
+            unitCentrX -= deslUnitX
+            unitCentrY += deslUnitY
+            ctx.clearRect(0, 0, W, H)
+            pXant = pX
+            pYant = pY
+            newCartesiano()
+            if(condGraph) {
+                newGraph()
+            }
+        }; let removeFunctPlain = () => {
+            divGrab.style.display = "none"
+            window.removeEventListener("mousemove", movePlain)
+        }; window.addEventListener("resize", () => {
+            let Wnew = window.innerWidth - 10
+            if(Wnew !== W) {
+                cnv.width = Wnew
+                W = Wnew
+            } let Hnew = window.innerHeight - 150
+            if(Hnew !== H) {
+                cnv.height = Hnew
+                H = Hnew
+            } ctx.clearRect(0, 0, W, H)
+            newCartesiano()
+            if(condGraph) {
+                newGraph()
+            }
+        }); sectG.addEventListener("mousedown", () => {
+            pXant = event.clientX
+            pYant = event.clientY
+            divGrab.style.display = "block"
+            window.addEventListener("mousemove", movePlain)
+            window.addEventListener("mouseup", removeFunctPlain)
+        });
+        let divFunct = document.querySelector(".funct__y > div")
+        let valorQuant
+        let X
+        let Y
+        let coef
+        let functY = (x) => {
+            let y = 0
+            for(let q = coef.length - 1; q >= 0; q--) {
+                y += coef[q]*Math.pow(x, q)
+            } return yCoord(y/fator)
+        }; let yCoord = (y) => {
+            return Math.floor(H/2) + hDesl - comprUnit/2 - (y - unitCentrY)*comprUnit
+        }; let xCoord = (x) => {
+            return Math.floor(W/2) + wDesl - comprUnit/2 + (x - unitCentrX)*comprUnit
+        }
+        let condShift = false
+        let zoomGraph = function(event) {
+            comprUnit *= Math.pow(2, -event.deltaY/1000)
+            if(comprUnit < 60) {
+                do {
+                    numZoom++
+                    comprUnit *= 2
+                } while(comprUnit < 60)
+                fator = Math.pow(2, numZoom)
+            } else if(comprUnit > 120) {
+                do {
+                    numZoom--
+                    comprUnit /= 2
+                } while(comprUnit > 120)
+                fator = Math.pow(2, numZoom)
+            } ctx.clearRect(0, 0, W, H)
+            newCartesiano()
+            if(condGraph == true) {
+                newGraph()
+            }
+        }
+        window.addEventListener("keydown", function() {
+            if(event.keyCode == 16) {
+                if(!condShift) {
+                    condShift = true
+                    sectG.addEventListener("mousewheel", zoomGraph)
+                }
+            }
+        }); window.addEventListener("keyup", function() {
+            if(event.keyCode == 16) {
+                if(condShift) {
+                    condShift = false
+                    sectG.removeEventListener("mousewheel", zoomGraph)
+                }
+            }
+        })
+        document.querySelector(".grau").addEventListener("input", function() {
+            for(let i = 0; i <= 50; i++) {
+                linhas[i].style.display = "none"
+            } let valor = parseInt(this.value)
+            if(isNaN(valor) || valor <= 0) {
+                valor = 0
+                divFunct.innerHTML = coefPolin(0)
+            } else {
+                if(valor > 50) {
+                    valor = 50
+                } divFunct.innerHTML = ""
+                for(let j = valor; j >= 2; j--) {
+                    divFunct.innerHTML += coefPolin(j) + variav(j) + " + "
+                } divFunct.innerHTML += coefPolin(1) + "x + " + coefPolin(0)
+            } this.value = valor
+            valorQuant = valor
+            for(let i = 0; i <= valor; i++) {
+                linhas[i].style.display = "table-row"
+            } verifInputs()
+        });
+        function verifInputs() {
+            X = new Array()
+            Y = new Array()
+            for(let k = 0; k <= 50; k++) {
+                linhas2[k].style.display = "none"
+            } for(let k = 0; k <= valorQuant; k++) {
+                let vX = parseFloat(conjX[k].value)
+                let vY = parseFloat(conjY[k].value)
+                if(!isNaN(vX) && !isNaN(vY)) {
+                    X.push(vX)
+                    Y.push(vY)
+                } else {
+                    if(condGraph == false) {
+                        mens.style.marginLeft = "-200%"
+                    } else if(condGraph == true) {
+                        ctx.clearRect(0, 0, W, H)
+                        newCartesiano()
+                    } condGraph = null
+                    return
+                }
+            } /*Descobrir os coeficientes*/
+            let matriz = new Array()
+            for(let j = 0; j <= valorQuant; j++) {
+                let newLinha = new Array()
+                for(let k = 0; k <= valorQuant; k++) {
+                    newLinha.push(Math.pow(X[j], k))
+                } newLinha.push(Y[j])
+                matriz.push(newLinha)
+            } coef = resolverSistema(matriz)
+            if(coef == null) {
+                if(condGraph !== false) {
+                    ctx.clearRect(0, 0, W, H)
+                    newCartesiano()
+                    condGraph = false
+                    mens.style.marginLeft = "0%"
+                }
+            } else {
+                if(condGraph !== true) {
+                    if(condGraph == false) {
+                        mens.style.marginLeft = "-200%"
+                    } condGraph = true
+                } else {
+                    ctx.clearRect(0, 0, W, H)
+                    newCartesiano()
+                } newGraph()
+                for(let k = 0; k <= valorQuant; k++) {
+                    let actLinha = linhas2[k + 50 - valorQuant]
+                    actLinha.style.display = "table-row"
+                    actLinha.querySelector("th:nth-child(2)").textContent = Math.round(coef[valorQuant - k]*100000)/100000
+                }
+            }
+        } function forEachLista(vetor, funcao) {
+            for(let t = 0; t < vetor.length; t++) {
+                funcao(vetor[t], t)
+            }
+        } function coefPolin(num) {
+            let strg = String(num)
+            let valor = "a<div class=sobTxt>"
+            for(let i = 0; i < strg.length; i++) {
+                valor += crctSub.charAt(parseInt(strg.charAt(i)))
+            } valor += "</div>"
+            return valor
+        } function variav(num) {
+            let strg = String(num)
+            let valor = "x<div class=exp>"
+            for(let i = 0; i < strg.length; i++) {
+                valor += crctExp.charAt(parseInt(strg.charAt(i)))
+            } valor += "</div>"
+            return valor
+        } function newGraph() {
+            //let fator = Math.pow(2, numZoom)
+            let unitIni = (unitCentrX - (Math.floor(W/2) + wDesl - comprUnit/2)/comprUnit)*fator
+            ctx.strokeStyle = "rgb(90,32,56)"
+            ctx.lineWidth = 12
+            let y = functY(unitIni - 6*fator/comprUnit)
+            for(let i = -5; i <= W + 6; i++) {
+                let yDps = functY(unitIni + i*fator/comprUnit)
+                if(yDps >= -6 && yDps <= H + 6) {
+                    if(y < -6 || y > H + 6) {
+                        ctx.beginPath()
+                        ctx.lineTo(i - 1, y)
+                    } else {
+                        if(i == -5) {
+                            ctx.beginPath()
+                        }
+                    } ctx.lineTo(i, yDps)
+                } else {
+                    if(y >= -6 && y <= H + 6) {
+                        ctx.lineTo(i, yDps)
+                        ctx.stroke()
+                    }
+                } y = yDps
+                yDps = functY(unitIni + (i + 1)*fator/comprUnit)
+            } if(y >= -6 && y <= H + 6) {
+                ctx.stroke()
+            } ctx.fillStyle = "#c37090"
+            ctx.textAlign = "center"
+            for(let k = 0; k <= valorQuant; k++) {
+                let newX = xCoord(X[k]/fator)
+                let newY = yCoord(Y[k]/fator)
+                if(newX > -12 && newX < W + 12 && newY > -12 && newY < H + 12) {
+                    ctx.beginPath()
+                    ctx.arc(newX, newY, 12, 0, 2*pi)
+                    ctx.fill()
+                } if(newX > -12 && newX < W + 12 && newY > -40 && newY < H - 6) {
+                    ctx.beginPath()
+                    ctx.fillText("(" + X[k] + ", " + Y[k] + ")", newX, newY + 30)
+                }
+            }
+        } function newCartesiano() {
+            ctx.font = "bold 20px Open Sans"
+            let meioX = Math.floor(W/2) + wDesl - comprUnit/2
+            let meioY = Math.floor(H/2) + hDesl - comprUnit/2
+            let unitX = unitCentrX - Math.floor(meioX/comprUnit)
+            let unitY = unitCentrY + Math.floor(meioY/comprUnit)
+            let cmprZeroX = null
+            let cmprZeroY = null
+            //let fator = Math.pow(2, numZoom)
+            let conjUnitX = []
+            let conjUnitY = []
+            ctx.fillStyle = "#b1406b"
+            for(let cmpr = meioX % comprUnit; cmpr <= W; cmpr += comprUnit) {
+                if(unitX !== 0) {
+                    ctx.fillRect(cmpr - 1, 0, 2, H)
+                } else {
+                    cmprZeroX = cmpr - 2
+                } conjUnitX.push([unitX, cmpr])
+                unitX++
+            } ctx.textAlign = "right"
+            for(let cmpr = meioY % comprUnit; cmpr <= H; cmpr += comprUnit) {
+                if(unitY !== 0) {
+                    ctx.fillRect(0, cmpr - 1, W, 2)
+                } else {
+                    cmprZeroY = cmpr - 2
+                } conjUnitY.push([unitY, cmpr])
+                unitY--
+            } ctx.fillStyle = "rgb(90,32,56)"
+            conjUnitX.forEach(elem => {
+                ctx.fillText(elem[0]*fator, elem[1] - 1 - 2*Math.pow(0, Math.abs(elem[0])), H - 3)
+            }); conjUnitY.forEach(elem => {
+                ctx.fillText(elem[0]*fator, W - 2, elem[1] - 2 - 2*Math.pow(0, Math.abs(elem[0])))
+            })
+            /*for(let cmpr = meioX % comprUnit; cmpr <= W; cmpr += comprUnit) {
+                ctx.fillText(unitX*fator, cmpr - 1, H - 3)
+            } for(let cmpr = meioY % comprUnit; cmpr <= H; cmpr += comprUnit) {
+                ctx.fillText(unitY*fator, W - 2, cmpr - 1)
+            }*/ if(cmprZeroX !== null) {
+                ctx.fillStyle = "#951a49"
+                ctx.fillRect(cmprZeroX, 0, 4, H)
+            } if(cmprZeroY !== null) {
+                ctx.fillStyle = "#951a49"
+                ctx.fillRect(0, cmprZeroY, W, 4)
+            }
+        } function changePointsSeta() {
+            let cos = Math.cos(pi*numSeta/25)
+            const abscos = Math.abs(cos)
+            cos = Math.sqrt(abscos)*cos/(abscos + Math.pow(0, abscos))
+            const termo1 = 35 - 10*(1 - cos)
+            const termo2 = 15 + 10*(1 - cos)
+            seta.setAttribute("points", termo2 + ",160 " + termo1 + ",140 " + termo1 + ",180")
+        }
+
+        /*resolverSistema([
+            [1, 1, 1, 2],
+            [4, 2, 1, 2],
+            [9, 3, 1, 2]
+        ])
+        resolverSistema([
+            [0, 0, 1, 2],
+            [4, 2, 1, 2],
+            [4, -2, 1, 2]
+        ])
+        resolverSistema([
+            [2, 3, 1, 5, 2],
+            [0, 0, 1, 2, 3],
+            [0, 0, 2, 3, 0],
+            [0, 0, 1, 4, 1]
+        ])
+
+        function newArr(matriz) {
+            let newM = new Array()
+            matriz.forEach(elem => {
+                let newLine = new Array()
+                elem.forEach(elem2 => {
+                    newLine.push(elem2)
+                }); newM.push(newLine)
+            }); return newM
+        }*/
+        function resolverSistema(matriz) {
+            const ordem = matriz.length //---> Ordem da matriz dos coeficientes
+            //let matrizOrig = newArr(matriz)
+            //console.table(matrizOrig)
+            /*Processo de escalonamento da matriz do sistema*/
+            for(let i = 0; i < ordem; i++) {
+                let diag = matriz[i][i]
+                if(diag !== 0) { //---> Se o elemento diagonal de uma coluna não for nulo, não é necessário efetuar alguma troca de linhas
+                    for(let j = i + 1; j < ordem; j++) {
+                        const eColun = matriz[j][i]
+                        if(eColun !== 0) {
+                            matriz[j][i] = 0
+                            const Q = -eColun/diag
+                            for(let k = i + 1; k <= ordem; k++) {
+                                matriz[j][k] += matriz[i][k]*Q
+                            }
+                        }
+                    } //console.table(matriz)
+                } else { //---> Se o elemento acima for nulo, deverá ocorrer uma troca de linha
+                    let hasOnlyZero = true
+                    for(let j = i + 1; j < ordem; j++) {
+                        const eColun = matriz[j][i]
+                        if(eColun !== 0) {
+                            const linhaAct = matriz[j]
+                            matriz[j] = matriz[i]
+                            matriz[i] = linhaAct
+                            diag = eColun
+                            for(let k = j + 1; k < ordem; k++) {
+                                const eColun2 = matriz[k][i]
+                                if(eColun2 !== 0) {
+                                    matriz[k][i] = 0
+                                    const Q = -eColun2/diag
+                                    for(let l = i + 1; l <= ordem; l++) {
+                                        matriz[k][l] += matriz[i][l]*Q
+                                    }
+                                } //console.table(matriz)
+                            } hasOnlyZero = false
+                            break
+                        }
+                    } if(hasOnlyZero) {
+                        return null
+                    }
+                }
+            } if(matriz[ordem - 1][ordem - 1] == 0) {
+                return null
+            }
+            /*Obtenção dos valores das incógnitas (coeficientes da função)*/
+            let coef = new Array()
+            for(let p = ordem - 1; p >= 0; p--) {
+                let valor = matriz[p][ordem] //---> Termo independente
+                coef.forEach((elem, index) => {
+                    valor -= matriz[p][ordem - coef.length + index]*elem
+                }); coef.unshift(Math.round(Math.pow(10, 10)*valor/matriz[p][p])/Math.pow(10, 10))
+            }
+            /*console.table(coef)
+            let vetProva = new Array()
+            matrizOrig.forEach(elem => {
+                let valor = 0
+                for(let i = 0; i < ordem; i++) {
+                    valor += elem[i]*coef[i]
+                } vetProva.push(valor)
+            }); console.table(vetProva)*/
+            return coef
+        }
+    //})
+</script>
+</html>
